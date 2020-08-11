@@ -1,34 +1,17 @@
 import styled, { keyframes } from 'styled-components';
 
-import Back from '../../assets/background.jpg'
-
-
 const fade = keyframes `
 
     from {
-        opacity: 1;
         transform: scale(1)
     }to {
-        opacity: 0.18;
         transform: scale(1.1)
     }
 `
-const move = keyframes `
-
-    from {
-
-        transform: translateY(0%)
-    }to {
-
-        transform: translateY(-100%)
-    }
-`
-
-
 
 export const ContentStyled = styled.div `
 
-    background: URL(${Back});
+    background: url("https://i1.wp.com/livewallpaper.info/wp-content/uploads/2017/08/anime-landscape-1920x1080-wallpaper-wp3802449.jpg?fit=1200%2C630&ssl%20=%201");
     background-attachment: fixed;
     height: 620px;
 
@@ -47,9 +30,8 @@ export const MaskStyled = styled.div `
     display: flex;
     align-items: center;
     justify-content: center;
-
-    background-color: rgba(0, 0, 0, 0.8);
-
+    
+    background: rgba(0, 0, 0, 0.6);
 `
 
 
@@ -105,7 +87,21 @@ export const SinopseStyled = styled.p `
 `
 
 
+
 export const ContentImageStyled = styled.div `
+    
+    display: flex;
+    flex-direction: column;
+
+    a{
+        margin-top: 25px;
+    }
+    
+    a:hover{
+
+        transition: background 200ms;
+        background: #1997c6;
+    }
     
     h2{
         color: #fff;
@@ -122,7 +118,7 @@ export const ContentImageStyled = styled.div `
 `
 export const ImageStyled = styled.img`
 
-    width: 330px;
+    width: 270px;
     border-radius: 10px;
 
     @media(max-width: 1080px){
@@ -133,12 +129,17 @@ export const ImageStyled = styled.img`
 `
 export const InfoStyled = styled.div`
 
-    display: flex;
+    display: none;
     justify-content: space-between;
 
     margin-bottom: 5px;
+    margin-top: 55px;
 
     font-size: 1.0rem;
+
+    h2{
+        margin: 0px 20px;
+    }
 
 `
 
@@ -196,6 +197,7 @@ export const ListAllStyled = styled.ul`
 
     li{
         list-style: none;
+
     }
     
     li img{
@@ -207,19 +209,34 @@ export const ListAllStyled = styled.ul`
     li img:hover{
         cursor: pointer;
         animation: ${fade} 0.4s forwards;
+        color:red
     }
-    li img:hover + h3{
 
-        animation-fill-mode: backwards;
-        animation: ${move} 0.3s forwards;
-        display: flex;
-    }
 
     @media(max-width: 1200px){
 
         margin: 0px 50px;
     }
 
+`
+export const ComandStyled = styled.div `
+
+    margin-top: 12px;
+
+    display: flex;
+    justify-content: space-between;
+
+    button{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+    }
+    button:hover{
+        opacity: 0.7;
+        transition: opacity 500ms;
+        cursor: pointer;
+    }
 `
 export const NameStyled = styled.h3 `
 
@@ -230,42 +247,21 @@ export const NameStyled = styled.h3 `
     text-align: left;
     
 `
-
-
-
-export const FooterStyled = styled.div`
-    
-    width: 100%;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    
-    background: #252830;
-    
-`
-export const ContentFooterStyled = styled.div`
-
-    width: 100%;
-    max-width: 1050px;
-    height: 150px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    a:hover{
-        animation: ${fade} 0.3s forwards;
-        text-decoration: underline;
-    }
-
-`
-export const AuthorStyled = styled.a`
+export const ButtonDeleteStyled = styled.button `
 
     color: #fff;
-    font-size: 1.6rem;
-    font-weight: 500;
+    background: #1997c6;
     text-shadow: #000 0 0 7px;
-    text-align: left;
+    font-size: 1.0rem;
+    font-weight: 900;
+    text-transform: uppercase;
     text-decoration: none;
+
+    border: #1997c6 2px solid;
+    border-radius: 5px;
+    padding: 10px 10px;
+    margin: 0px 5px;
+
+    height: 30px;
+    width: 30px;
 `

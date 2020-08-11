@@ -1,6 +1,11 @@
-import React from 'react';
+import React, {  useState, useEffect  } from 'react';
+import axios from 'axios';
+
+import Header from '../../components/Header';
+import Footer from '../../components/Footer';
 
 import {
+    
     ContentStyled,
     ContentTextStyled,
     ContentImageStyled,
@@ -14,51 +19,57 @@ import {
     ListStyled,
     ListTypeStyled,
     AllListStyled,
+    ComandStyled,
     NameStyled,
+    ButtonDeleteStyled,
     ContentListStyled,
     ListAllStyled,
 
-    FooterStyled,
-    ContentFooterStyled,
-    AuthorStyled,
 } from './styled.js'
 
-import Visual from '../../assets/visual.jpg'
-
-import A01 from '../../assets/list-animes/A01.jpg'
-import A02 from '../../assets/list-animes/A02.jpg'
-import A03 from '../../assets/list-animes/A03.jpg'
-import A04 from '../../assets/list-animes/A04.jpg'
-import A05 from '../../assets/list-animes/A05.jpg'
-import A06 from '../../assets/list-animes/A06.jpg'
-
-import S01 from '../../assets/list-animes/S01.jpg'
-import S02 from '../../assets/list-animes/S02.jpg'
-import S03 from '../../assets/list-animes/S03.jpg'
-import S04 from '../../assets/list-animes/S04.jpg'
-import S05 from '../../assets/list-animes/S05.jpg'
-import S06 from '../../assets/list-animes/S06.jpg'
-
-
 function Home () {
+
+    const [animesResults, setAnimesResults] = useState([])
+    const [seriesResults, setSeriesResults] = useState([])
+    const [value, setValue] = useState({
+    
+        "episodes": "Loading...",
+        "score": "Loading...",
+    })
+
+    useEffect(() => {
+
+        async function getData() {
+            const responseAnimes = await axios.get("http://localhost:3333/animes")
+            setAnimesResults(responseAnimes.data)
+
+
+            const responseSeries = await axios.get("http://localhost:3333/series")
+            setSeriesResults(responseSeries.data)
+        }
+
+        getData()
+    }, [])
+
     return (
         <>
+            <Header />
+            
             <ContentStyled>
                 <MaskStyled>
 
                     <Container>
 
                         <ContentTextStyled>
-                            <TitleStyled>Great Pretender</TitleStyled>
-                            <SinopseStyled>Edamura Masato é supostamente o maior vigarista do Japão. Juntamente com seu parceiro Kudo, eles tentam enganar um francês em Asakusa, mas inesperadamente eles é que são enganados. O francês em questão acaba por ser Laurent Thierry - um "homem de confiança" de nível muito mais alto no controle da máfia. Edamura ainda está para descobrir que destino o espera, depois de se envolver nos trabalhos sujos do francês.</SinopseStyled>
-                        </ContentTextStyled>
-
-                        <ContentImageStyled>
-                            <ImageStyled src={Visual} alt="Great Pretender" />
+                            <TitleStyled>{value.title}</TitleStyled>
+                            <SinopseStyled>{value.synopsis}</SinopseStyled>
                             <InfoStyled>
-                                <h2>Tipo: Anime</h2>
-                                <h2>Episódios: 23</h2>
+                                <h2>Score: {value.score}</h2>
+                                <h2>Episódios: {value.episodes}</h2>
                             </InfoStyled>
+                        </ContentTextStyled>
+                        <ContentImageStyled>
+                            <ImageStyled src={value.image} alt={value.title} />
                         </ContentImageStyled>
 
                     </Container>
@@ -69,34 +80,49 @@ function Home () {
             <ListStyled>
                 <ContentListStyled>
 
-                    <ListTypeStyled>Animes</ListTypeStyled>
+                    <ListTypeStyled>Animes Favoritos</ListTypeStyled>
                     
                     <AllListStyled>
-                        <ListAllStyled>
-                            <li>
-                                <img src={A01} alt="Great Pretender" />
-                                <NameStyled>Great Pretender</NameStyled>
-                            </li>
-                            <li>
-                                <img src={A02} alt="Code Geass" />
-                                <NameStyled>Code Geass</NameStyled>
-                            </li>
-                            <li>
-                                <img src={A03} alt="Youkoso Jitsuryoku Shijou Shugi no Kyoushitsu e" />
-                                <NameStyled>Youkoso Jitsuryoku Shijou Shugi no <br/> Kyoushitsu e</NameStyled>
-                            </li>
-                            <li>
-                                <img src={A04} alt="Death Note" />
-                                <NameStyled>Death Note</NameStyled>
-                            </li>
-                            <li>
-                                <img src={A05} alt="Kaguya-sama wa Kokurasetai" />
-                                <NameStyled>Kaguya-sama wa Kokurasetai</NameStyled>
-                            </li>
-                            <li>
-                                <img src={A06} alt="No Game No Life" />
-                                <NameStyled>No Game No Life</NameStyled>
-                            </li>
+                        <ListAllStyled> 
+                            {animesResults.map((animesResult) => {
+                                return(
+                                    <li key={animesResult.mal_id} >
+
+                                        <img 
+                                            src={animesResult.image} 
+                                            alt={animesResult.title}
+
+                                            onClick={async () => {
+                                                var response = await axios.get("http://localhost:3333/anime", {
+                                                    params: {
+                                                        mal_id: animesResult.mal_id,
+                                                    }
+                                                })
+
+                                                setValue(response.data[0])
+                                            }}
+                                        />
+                                        <ComandStyled>
+                                            <NameStyled>{animesResult.title}</NameStyled>
+                                            <ButtonDeleteStyled
+
+                                                onClick={() => {
+                                                    
+                                                    axios.delete("http://localhost:3333/del-animes", {
+                                                        params: {
+                                                            mal_id: animesResult.mal_id,
+                                                        }
+                                                    })
+                                                }}
+                                            >
+                                                X
+                                            </ButtonDeleteStyled>
+                                        </ComandStyled>
+                                        
+                                    </li>
+                                )
+                            })}
+
                         </ListAllStyled>
                     </AllListStyled>
 
@@ -104,46 +130,63 @@ function Home () {
 
                 <ContentListStyled>
 
-                    <ListTypeStyled>Séries</ListTypeStyled>
+                    <ListTypeStyled>Séries Favoritas</ListTypeStyled>
                     
                     <AllListStyled>
                         <ListAllStyled>
-                            <li>
-                                <img src={S01} alt="Supernatural" />
-                                <NameStyled>Supernatural</NameStyled>
-                            </li>
-                            <li>
-                                <img src={S02} alt="Mr. Robot" />
-                                <NameStyled>Mr. Robot</NameStyled>
-                            </li>
-                            <li>
-                                <img src={S03} alt="You" />
-                                <NameStyled>You</NameStyled>
-                            </li>
-                            <li>
-                                <img src={S04} alt="The Umbrella Academy" />
-                                <NameStyled>The Umbrella Academy</NameStyled>
-                            </li>
-                            <li>
-                                <img src={S05} alt="Peaky Blinders" />
-                                <NameStyled>Peaky Blinders</NameStyled>
-                            </li>
-                            <li>
-                                <img src={S06} alt="Dark" />
-                                <NameStyled>Dark</NameStyled>
-                            </li>
+                            {seriesResults.map((seriesResult) => {
+                                    return(
+                                        <li key={seriesResult.id_db} >
+
+                                            <img 
+                                                src={seriesResult.image_thumbnail_path} 
+                                                alt={seriesResult.name} 
+
+                                                onClick={async () => {
+                                                    var response = await axios.get("http://localhost:3333/serie", {
+                                                        params: {
+                                                            id: seriesResult.id,
+                                                        }
+                                                    })
+    
+                                                    var objSerie = {
+                                                        "image": response.data[0].image_thumbnail_path,
+                                                        "title": response.data[0].name,
+                                                        "synopsis": "Not Found",
+                                                        "episodes": "Not Found",
+                                                        "score": "Not Found"
+
+                                                    }
+                                                    setValue(objSerie)
+                                                }}
+                                            />
+                                            <ComandStyled>
+                                                <NameStyled>{seriesResult.name}</NameStyled>
+                                                <ButtonDeleteStyled
+
+                                                    onClick={() => {
+                                                        
+                                                        axios.delete("http://localhost:3333/del-series", {
+                                                            params: {
+                                                                id: seriesResult.id,
+                                                            }
+                                                        })
+                                                    }}
+                                                >
+                                                    X
+                                                </ButtonDeleteStyled>
+                                            </ComandStyled>
+                                        </li>
+                                    )
+                                })}
                         </ListAllStyled>
                     </AllListStyled>
 
                 </ContentListStyled>
             </ListStyled>
 
-            <FooterStyled>
-                <ContentFooterStyled>
-                    <AuthorStyled href="https://github.com/natansantoss" target="_blank">Natan.Santos</AuthorStyled>
-                </ContentFooterStyled>
-            </FooterStyled>
-        </>     
+            <Footer />
+        </>
     )
 }
 

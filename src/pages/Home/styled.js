@@ -127,21 +127,7 @@ export const ImageStyled = styled.img`
     }
     
 `
-export const InfoStyled = styled.div`
 
-    display: none;
-    justify-content: space-between;
-
-    margin-bottom: 5px;
-    margin-top: 55px;
-
-    font-size: 1.0rem;
-
-    h2{
-        margin: 0px 20px;
-    }
-
-`
 
 
 export const ListStyled = styled.div `
@@ -245,6 +231,8 @@ export const NameStyled = styled.h3 `
     font-weight: 500;
     text-shadow: #fff 0 0 7px;
     text-align: left;
+    
+    width: 150px;
     
 `
 export const ButtonDeleteStyled = styled.button `

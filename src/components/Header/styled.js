@@ -13,6 +13,16 @@ export const HeaderStyled = styled.header`
     align-items: center;
     justify-content: center;
 `
+export const LogoutStyled = styled.a`
+
+    color: #fff;
+    text-shadow: #fff 0 0 7px;
+    font-size: 1.0rem;
+    font-weight: 500;
+    padding: 15px;
+
+    cursor: pointer;
+`
 export const Container = styled.div`
 
     width: 100%;

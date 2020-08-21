@@ -13,7 +13,6 @@ import {
     ImageStyled,
     TitleStyled,
     SinopseStyled,
-    InfoStyled,
     MaskStyled,
 
     ListStyled,
@@ -29,22 +28,24 @@ import {
 
 function Home () {
 
+    const idUser = localStorage.getItem('id_user')
+    const nameUser = localStorage.getItem('name')
+
     const [animesResults, setAnimesResults] = useState([])
     const [seriesResults, setSeriesResults] = useState([])
     const [value, setValue] = useState({
     
-        "episodes": "Loading...",
-        "score": "Loading...",
+        "title": `Bem-Vindo(a)`,
     })
 
     useEffect(() => {
 
         async function getData() {
-            const responseAnimes = await axios.get("http://localhost:3333/animes")
+            const responseAnimes = await axios.get(`http://localhost:3333/animes?user_id=${idUser}`)
             setAnimesResults(responseAnimes.data)
 
 
-            const responseSeries = await axios.get("http://localhost:3333/series")
+            const responseSeries = await axios.get(`http://localhost:3333/series?user_id=${idUser}`)
             setSeriesResults(responseSeries.data)
         }
 
@@ -63,13 +64,9 @@ function Home () {
                         <ContentTextStyled>
                             <TitleStyled>{value.title}</TitleStyled>
                             <SinopseStyled>{value.synopsis}</SinopseStyled>
-                            <InfoStyled>
-                                <h2>Score: {value.score}</h2>
-                                <h2>Episódios: {value.episodes}</h2>
-                            </InfoStyled>
                         </ContentTextStyled>
                         <ContentImageStyled>
-                            <ImageStyled src={value.image} alt={value.title} />
+                            <ImageStyled src={value.image} alt={value.image} />
                         </ContentImageStyled>
 
                     </Container>
@@ -86,7 +83,7 @@ function Home () {
                         <ListAllStyled> 
                             {animesResults.map((animesResult) => {
                                 return(
-                                    <li key={animesResult.mal_id} >
+                                    <li key={animesResult.id} >
 
                                         <img 
                                             src={animesResult.image} 
@@ -111,6 +108,7 @@ function Home () {
                                                     axios.delete("http://localhost:3333/del-animes", {
                                                         params: {
                                                             mal_id: animesResult.mal_id,
+                                                            user_id: idUser
                                                         }
                                                     })
                                                 }}
@@ -146,6 +144,7 @@ function Home () {
                                                     var response = await axios.get("http://localhost:3333/serie", {
                                                         params: {
                                                             id: seriesResult.id,
+                                                            user_id: idUser
                                                         }
                                                     })
     

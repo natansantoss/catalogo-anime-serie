@@ -23,6 +23,8 @@ import {
 
 function Anime () {
 
+    const idUser = localStorage.getItem('id_user')
+
     const [values, setvalues] = useState([])
     const [results, setResults] = useState([])
 
@@ -60,7 +62,8 @@ function Anime () {
                                                     image_url: result.image_url,
                                                     episodes: result.episodes,
                                                     score: result.score,
-                                                    url: result.url
+                                                    url: result.url,
+                                                    user_id: idUser
                                                 })
                                             }}>
 

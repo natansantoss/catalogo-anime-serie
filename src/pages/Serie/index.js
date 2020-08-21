@@ -23,6 +23,8 @@ import {
 
 function Serie () {
 
+    const idUser = localStorage.getItem('id_user')
+
     const [results, setResults] = useState([])
     const [values, setvalues] = useState([])
 
@@ -56,7 +58,8 @@ function Serie () {
                                                 axios.post("http://localhost:3333/create-series", {
                                                     name: value.name,
                                                     image_thumbnail_path: value.image_thumbnail_path,
-                                                    id: value.id
+                                                    id: value.id,
+                                                    user_id: idUser
                                                 })
 
                                             }}>
